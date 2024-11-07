@@ -9,16 +9,6 @@ commands:
       - run: |
           echo "Distroy environment: ${CIRCLE_WORKFLOW_ID:0:7}"
 
-  # Exercise - Rollback
-  destroy-bucket:
-    description: Destroy Bucket.
-    steps:
-      - run:
-          name: Destroy environment
-          when: on_fail
-          command: |
-            echo "Distroy environment: ${CIRCLE_WORKFLOW_ID:0:7} "
-            aws s3 rm "s3://udacity-tf-tscotto-us-east" --recursive
   destroy-environment:
     description: Destroy backend and frontend cloudformation stacks given a workflow ID.
     steps:
@@ -29,9 +19,17 @@ commands:
             echo "Distroy environment: ${CIRCLE_WORKFLOW_ID:0:7} "
             eksctl delete iamserviceaccount --name cluster-autoscaler --namespace kube-system --cluster udacity-cluster --region us-east-2
             cd starter/infra
-            terraform destroy -var="bucket=${TF_BUCKET}" -auto-approve
+            terraform destroy -var="bucket_name=${TF_BUCKET}" -auto-approve
+  # Exercise - Rollback
+  destroy-bucket:
+    description: Destroy Bucket.
+    steps:
+      - run:
+          name: Destroy environment
+          when: on_fail
+          command: |
+            echo "Distroy environment: ${CIRCLE_WORKFLOW_ID:0:7} "
             aws s3 rm "s3://udacity-tf-tscotto-us-east" --recursive
-
 jobs:
   build-s3:
     docker:
@@ -96,7 +94,7 @@ jobs:
             - kubeconfig/config
 
       - destroy-environment
-      - destroy-bucket
+#      - destroy-bucket
   config-infrastructure:
     docker:
       - image: amazon/aws-cli
