@@ -84,6 +84,7 @@ jobs:
       - run:
           name: Configure AWS CLI and Update Kubeconfig
           command: |
+            mkdir -p /tmp/kubeconfig
             aws eks update-kubeconfig --name udacity-cluster --region us-east-2 --kubeconfig /tmp/kubeconfig/config
             ls /tmp/
             # mkdir -p /tmp/kubeconfig
