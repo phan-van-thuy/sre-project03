@@ -81,19 +81,12 @@ jobs:
             ls -l
             cd starter/infra
             terraform apply -var="bucket_name=${TF_BUCKET}" -auto-approve
+
       - run:
           name: Configure AWS CLI and Update Kubeconfig
           command: |
             mkdir -p /tmp/kubeconfig
             aws eks update-kubeconfig --name udacity-cluster --region us-east-2 --kubeconfig /tmp/kubeconfig/config
-            ls /tmp/
-            # mkdir -p /tmp/kubeconfig
-            # if [ -f ~/.kube/config ]; then
-            #   cp ~/.kube/config /tmp/kubeconfig/config
-            # else
-            #   echo "Kubeconfig file not found!"
-            #   exit 1
-            # fi
       - persist_to_workspace:
           root: /tmp
           paths:
