@@ -68,7 +68,7 @@ jobs:
       - persist_to_workspace:
           root: /tmp
           paths:
-            - /tmp/kubeconfig/config
+            - kubeconfig/config
 
       - destroy-environment
 
