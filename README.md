@@ -73,19 +73,19 @@ The AWS environment will be built in the `us-east-2` region of AWS
 4. *[Node elasticity]*
 
 ### Setup auto scale Node Cluster Kubernetes
-connectivity to your AWS Kubernetes cluster:
-    aws eks --region us-east-2 update-kubeconfig --name udacity-cluster
-Change the account ID before running the command below:
-    kubectl config use-context arn:aws:eks:us-east-2:ID-ACCOUNT:cluster/udacity-cluster
-Connect to cluster:
-    eksctl utils associate-iam-oidc-provider --cluster udacity-cluster --approve --region=us-east-2
-Create IAM Role for policy arn:
-    eksctl create iamserviceaccount --name cluster-autoscaler --namespace kube-system --cluster udacity-cluster --attach-policy-arn "arn:aws:iam::ID-ACCOUNT:policy/udacity-k8s-autoscale" --approve --region us-east-2
-ID-ACCOUNT: Get ID using command: 
+1. connectivity to your AWS Kubernetes cluster:
+    -   aws eks --region us-east-2 update-kubeconfig --name udacity-cluster
+2. Change the account ID before running the command below:
+    -   kubectl config use-context arn:aws:eks:us-east-2:ID-ACCOUNT:cluster/udacity-cluster
+3. Connect to cluster:
+    -   eksctl utils associate-iam-oidc-provider --cluster udacity-cluster --approve --region=us-east-2
+4. Create IAM Role for policy arn:
+    -   eksctl create iamserviceaccount --name cluster-autoscaler --namespace kube-system --cluster udacity-cluster --attach-policy-arn "arn:aws:iam::ID-ACCOUNT:policy/udacity-k8s-autoscale" --approve --region us-east-2
+5. ID-ACCOUNT: Get ID using command: 
     aws sts get-caller-identity     --query Account     --output text
-Deployment Pod check autoscale on kubernetes EKS:
-    
-
+6. Deployment Pod check autoscale on kubernetes EKS:
+    -   kubectl apply -f cluster_autoscale.yml
+    -   kubectl -n kube-system logs -f deployment/cluster-autoscaler
 5. *[Observability with metrics]*
  
    You have realized there is no observability in the Kubernetes environment. You suspect there is a service
