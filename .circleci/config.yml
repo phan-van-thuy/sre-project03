@@ -76,6 +76,7 @@ jobs:
       - run:
           name: Terraform Plan and Apply
           command: |
+            ls -la
             cd ../starter/infra
             terraform apply -var="bucket=${TF_BUCKET}" -auto-approve
       - run:
