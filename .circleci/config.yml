@@ -75,6 +75,7 @@ jobs:
       - run:
           name: Terraform Init
           command: |
+            cd starter/infra
             terraform init -backend-config="bucket=${TF_BUCKET}"
       - run:
           name: Terraform Plan and Apply
