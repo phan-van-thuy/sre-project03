@@ -10,6 +10,15 @@ commands:
           echo "Distroy environment: ${CIRCLE_WORKFLOW_ID:0:7}"
 
   # Exercise - Rollback
+  destroy-bucket:
+    description: Destroy Bucket.
+    steps:
+      - run:
+          name: Destroy environment
+          when: on_fail
+          command: |
+            echo "Distroy environment: ${CIRCLE_WORKFLOW_ID:0:7} "
+            aws s3 rm "s3://udacity-tf-tscotto-us-east" --recursive
   destroy-environment:
     description: Destroy backend and frontend cloudformation stacks given a workflow ID.
     steps:
@@ -33,7 +42,15 @@ jobs:
       - run:
           name: Create S3 Bucket
           command: |
-            aws s3api create-bucket --bucket udacity-tf-tscotto-us-east  --create-bucket-configuration LocationConstraint=us-east-2
+            BUCKET_NAME="udacity-tf-tscotto-us-east"
+
+            if aws s3api head-bucket --bucket "$BUCKET_NAME" 2>/dev/null; then
+              echo "Bucket $BUCKET_NAME already exists."
+            else
+              aws s3api create-bucket --bucket udacity-tf-tscotto-us-east  --create-bucket-configuration LocationConstraint=us-east-2
+            fi
+      - destroy-bucket
+
   deploy-infrastructure:
     docker:
       - image: hashicorp/terraform:latest
@@ -71,7 +88,7 @@ jobs:
             - kubeconfig/config
 
       - destroy-environment
-
+      - destroy-bucket
   config-infrastructure:
     docker:
       - image: amazon/aws-cli
