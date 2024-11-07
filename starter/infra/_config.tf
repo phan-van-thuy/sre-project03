@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket = var.bucket_name # Update here with your S3 bucket #"udacity-tf-tscotto-us-east"#
+    bucket = "udacity-tf-tscotto-us-east" #var.bucket_name # Update here with your S3 bucket #
     key    = "terraform/terraform.tfstate"
     region = "us-east-2"
   }
@@ -14,7 +14,7 @@ provider "aws" {
   }
 }
 
-variable "bucket_name" {
-  description = "The name of the S3 bucket"
-  type        = string
-}
+# variable "bucket_name" {
+#   description = "The name of the S3 bucket"
+#   type        = string
+# }
