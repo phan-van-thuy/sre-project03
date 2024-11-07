@@ -84,10 +84,14 @@ jobs:
       - run:
           name: Configure AWS CLI and Update Kubeconfig
           command: |
-            aws eks --region us-east-2 update-kubeconfig --name udacity-cluster
+            aws eks update-kubeconfig --name udacity-cluster --region us-east-2 
             mkdir -p /tmp/kubeconfig
-            cp ~/.kube/config /tmp/kubeconfig/config
-
+            if [ -f ~/.kube/config ]; then
+              cp ~/.kube/config /tmp/kubeconfig/config
+            else
+              echo "Kubeconfig file not found!"
+              exit 1
+            fi
       - persist_to_workspace:
           root: /tmp
           paths:
