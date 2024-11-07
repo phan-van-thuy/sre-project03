@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket = "udacity-tf-tscotto-us-east" # Update here with your S3 bucket
+    bucket = var.bucket_name
     key    = "terraform/terraform.tfstate"
     region = "us-east-2"
   }
@@ -12,4 +12,9 @@ provider "aws" {
   default_tags {
     tags = local.tags
   }
+}
+
+variable "bucket_name" {
+  description = "The name of the S3 bucket"
+  type        = string
 }
