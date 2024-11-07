@@ -29,7 +29,7 @@ commands:
             echo "Distroy environment: ${CIRCLE_WORKFLOW_ID:0:7} "
             eksctl delete iamserviceaccount --name cluster-autoscaler --namespace kube-system --cluster udacity-cluster --region us-east-2
             cd starter/infra
-            terraform destroy -auto-approve
+            terraform destroy -backend-config="bucket=${TF_BUCKET}" -auto-approve
             aws s3 rm "s3://udacity-tf-tscotto-us-east" --recursive
 
 jobs:
@@ -74,13 +74,14 @@ jobs:
             echo "TF_BUCKET=$TF_BUCKET" >> $BASH_ENV
       - run:
           name: Terraform Init
-          command: terraform init -backend-config="bucket=${TF_BUCKET}"
+          command: |
+            terraform init -backend-config="bucket=${TF_BUCKET}"
       - run:
           name: Terraform Plan and Apply
           command: |
-            ls -la
+            ls -l
             cd starter/infra
-            terraform apply -var="bucket=${TF_BUCKET}" -auto-approve
+            terraform apply -backend-config="bucket=${TF_BUCKET}" -auto-approve
       - run:
           name: Configure AWS CLI and Update Kubeconfig
           command: |
