@@ -24,7 +24,7 @@ resource "kubernetes_service" "blue" {
     port {
       port        = 80
       target_port = 80
-    }W
+    }
 
     type = "LoadBalancer"
   }
