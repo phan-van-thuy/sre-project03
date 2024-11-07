@@ -22,7 +22,7 @@ commands:
             eksctl delete iamserviceaccount --name cluster-autoscaler --namespace kube-system --cluster udacity-cluster --region us-east-2
             cd starter/infra
             terraform destroy -auto-approve
-            aws s3 rm "s3://udacity-${CIRCLE_WORKFLOW_ID:0:7}" --recursive
+            aws s3 rm "s3://udacity-tf-tscotto-us-east" --recursive
 
 jobs:
   build-s3:
@@ -33,7 +33,7 @@ jobs:
       - run:
           name: Create S3 Bucket
           command: |
-            aws s3api create-bucket --bucket udacity-${CIRCLE_WORKFLOW_ID:0:7} --region us-east-2
+            aws s3api create-bucket --bucket udacity-tf-tscotto-us-east --region us-east-2
   deploy-infrastructure:
     docker:
       - image: hashicorp/terraform:latest
@@ -48,7 +48,7 @@ jobs:
           name: Set Bucket Environment Variable
           command: |
             # Tạo tên bucket với 7 ký tự đầu của CIRCLE_WORKFLOW_ID
-            export TF_BUCKET="udacity-${CIRCLE_WORKFLOW_ID:0:7}"
+            export TF_BUCKET="udacity-tf-tscotto-us-east"
             echo "TF_BUCKET=$TF_BUCKET" >> $BASH_ENV
       - run:
           name: Terraform Init
