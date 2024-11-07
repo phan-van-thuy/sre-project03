@@ -33,7 +33,7 @@ jobs:
       - run:
           name: Create S3 Bucket
           command: |
-            aws s3api create-bucket --bucket udacity-tf-tscotto-us-east --region us-east-2
+            aws s3api create-bucket --bucket udacity-tf-tscotto-us-east  --create-bucket-configuration LocationConstraint=us-east-2
   deploy-infrastructure:
     docker:
       - image: hashicorp/terraform:latest
